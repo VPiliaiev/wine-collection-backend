@@ -1,5 +1,3 @@
-# wine-collection-backend
-
 
 # wine-collection-backend
 
