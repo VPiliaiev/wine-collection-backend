@@ -1,11 +1,11 @@
 from rest_framework import generics
 
-from user.serializers import UserSerializer
+from user.serializers import UserSerializer, RegisterUserSerializer
 from rest_framework.permissions import IsAuthenticated
 
 
 class CreateUserView(generics.CreateAPIView):
-    serializer_class = UserSerializer
+    serializer_class = RegisterUserSerializer
 
 
 class ManageUserView(generics.RetrieveUpdateAPIView):
