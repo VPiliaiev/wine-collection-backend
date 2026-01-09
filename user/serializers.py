@@ -38,7 +38,6 @@ class UserSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "email",
-            "password",
             "first_name",
             "last_name",
             "phone",
@@ -46,24 +45,28 @@ class UserSerializer(serializers.ModelSerializer):
             "is_staff",
         )
         read_only_fields = ("id", "is_staff")
-        extra_kwargs = {
-            "password": {
-                "write_only": True,
-                "min_length": 5,
-                "style": {"input_type": "password"},
-                "label": _("Password"),
-            }
-        }
 
     def create(self, validated_data):
         return get_user_model().objects.create_user(**validated_data)
 
-    def update(self, instance, validated_data):
-        password = validated_data.pop("password", None)
-        user = super().update(instance, validated_data)
 
-        if password:
-            user.set_password(password)
-            user.save()
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True, min_length=5)
 
+    def validate_old_password(self, value):
+        user = self.context["request"].user
+        if not user.check_password(value):
+            raise serializers.ValidationError("Wrong old password!")
+        return value
+
+    def validate(self, data):
+        if data["old_password"] == data["new_password"]:
+            raise serializers.ValidationError({"new_password": "New password cannot be the same as old one."})
+        return data
+
+    def save(self, **kwargs):
+        user = self.context["request"].user
+        user.set_password(self.validated_data["new_password"])
+        user.save()
         return user
