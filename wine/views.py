@@ -8,17 +8,18 @@ from wine.serializers import WineListSerializer, WineRetrieveSerializer
 
 
 class WineListView(generics.ListAPIView):
-    queryset = Wine.objects.select_related(
-        "country", "wine_type", "category"
-    ).prefetch_related("moods")
+    queryset = Wine.objects.all().distinct()
     serializer_class = WineListSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = WineFilter
-    ordering = ["price"]
+    ordering_fields = ["price", "name"]
+    ordering = [
+        "price",
+    ]
 
 
 class WineDetailView(generics.RetrieveAPIView):
     queryset = Wine.objects.select_related(
-        "country", "wine_type", "category"
+        "country", "wine_type", "category", "purpose"
     ).prefetch_related("moods")
     serializer_class = WineRetrieveSerializer
