@@ -123,10 +123,7 @@ class WineFilterAPITest(APITestCase):
         self.assertEqual(response.data["results"][0]["name"], "Odulin White")
 
     def test_filter_by_price_range(self):
-        response = self.client.get(
-            self.url,
-            {"min_price": 20, "max_price": 30}
-        )
+        response = self.client.get(self.url, {"min_price": 20, "max_price": 30})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data["results"]), 1)
@@ -146,6 +143,11 @@ class WineFilterAPITest(APITestCase):
         self.assertEqual(len(response.data["results"]), 1)
         self.assertEqual(response.data["results"][0]["name"], "Odulin White")
 
+    def test_filter_by_country(self):
+        response = self.client.get(self.url, {"country": "Italy"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data["results"]), 2)
+
     def test_combined_filters(self):
         response = self.client.get(
             self.url,
@@ -153,7 +155,7 @@ class WineFilterAPITest(APITestCase):
                 "purpose": "party",
                 "min_price": 20,
                 "category": "premium",
-            }
+            },
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
