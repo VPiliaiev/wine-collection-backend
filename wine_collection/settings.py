@@ -33,17 +33,18 @@ ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "0.0.0.0,localhost,127.0.0.1").split(
 # Application definition
 
 INSTALLED_APPS = [
+    "cloudinary_storage",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "cloudinary",
     "corsheaders",
     "rest_framework",
     "debug_toolbar",
     "drf_spectacular",
-    "cloudinary",
     "django_filters",
     "user",
     "wine",
