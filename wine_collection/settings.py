@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "debug_toolbar",
     "drf_spectacular",
+    "cloudinary",
     "django_filters",
     "user",
     "wine",
@@ -192,3 +193,11 @@ CORS_ALLOW_ALL_ORIGINS = os.getenv("CORS_ALLOW_ALL_ORIGINS", "False") == "True"
 cors_origins = os.getenv("CORS_ALLOWED_ORIGINS")
 if cors_origins:
     CORS_ALLOWED_ORIGINS = cors_origins.split(",")
+
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME": os.environ.get("CLOUDINARY_CLOUD_NAME"),
+    "API_KEY": os.environ.get("CLOUDINARY_API_KEY"),
+    "API_SECRET": os.environ.get("CLOUDINARY_API_SECRET"),
+}
+
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
