@@ -39,11 +39,10 @@ class Purpose(models.Model):
         return self.name
 
 
-def wine_image_path(instance: "Wine", filename: str) -> pathlib.Path:
-    filename = (
-            f"{slugify(instance.name)}-{uuid.uuid4()}" + pathlib.Path(filename).suffix
-    )
-    return pathlib.Path("upload/wine") / pathlib.Path(filename)
+def wine_image_path(instance: "Wine", filename: str) -> str:
+    extension = pathlib.Path(filename).suffix
+    new_filename = f"{slugify(instance.name)}-{uuid.uuid4()}{extension}"
+    return f"upload/wine/{new_filename}"
 
 
 class Wine(models.Model):
@@ -66,7 +65,9 @@ class Wine(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(null=True, upload_to=wine_image_path, blank=True)
     stock = models.PositiveIntegerField(default=0)
-    purpose = models.ForeignKey("Purpose", on_delete=models.PROTECT, related_name="wines")
+    purpose = models.ForeignKey(
+        "Purpose", on_delete=models.PROTECT, related_name="wines"
+    )
 
     @property
     def in_stock(self):
