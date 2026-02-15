@@ -149,6 +149,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
+STATICFILES_STORAGE = "whitenoise.storage.StaticFilesStorage"
+WHITENOISE_MANIFEST_STRICT = False
+
 STATIC_URL = "static/"
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
@@ -203,6 +206,6 @@ STORAGES = {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": "whitenoise.storage.StaticFilesStorage",
     },
 }
