@@ -8,6 +8,7 @@ class CartItemListSerializer(serializers.ModelSerializer):
     wine_price = serializers.DecimalField(
         source="wine.price", max_digits=10, decimal_places=2, read_only=True
     )
+    wine_image = serializers.SerializerMethodField()
     subtotal = serializers.SerializerMethodField()
 
     class Meta:
@@ -16,10 +17,16 @@ class CartItemListSerializer(serializers.ModelSerializer):
             "id",
             "wine_id",
             "wine_name",
+            "wine_image",
             "wine_price",
             "quantity",
             "subtotal",
         )
+
+    def get_wine_image(self, obj):
+        if obj.wine.image:
+            return obj.wine.image.url
+        return None
 
     def get_subtotal(self, obj):
         return obj.wine.price * obj.quantity
